@@ -35,8 +35,16 @@ let waypoints = [
   [520, 280]
 ];
 
-// app.ticker.add(delta => moveGuy(delta, waypoints, movingGuy));
+function setup() {
+
+
+
+  moveGuy()
+  // app.ticker.add(delta => moveGuy(delta, waypoints, movingGuy));
+}
+
 function moveGuy() {
+
   window.reverse = !window.reverse;
   let count = waypoints.length;
   clearInterval(window.movingGuyInterval);
@@ -44,6 +52,8 @@ function moveGuy() {
   window.movingGuyInterval = setInterval(movingGuyLogic, 500);
 }
 function movingGuyLogic() {
+  // requestAnimationFrame(movingGuyLogic);
+  // movingGuy.x += 5;
   movingGuy.x = waypoints[window.currentIndex][0];
   movingGuy.y = waypoints[window.currentIndex][1];
   // window.currentIndex++;
