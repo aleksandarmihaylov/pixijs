@@ -113,7 +113,6 @@ function moveGuy() {
   if (collision === "top") {
     movingGuy.x += 5;
   }
-  // трябва да се намали контейнера
 
   // if (movingGuy.y === 70 && movingGuy.x < 685) {
   //   movingGuy.x += 5;
