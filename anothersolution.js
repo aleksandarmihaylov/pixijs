@@ -9,6 +9,7 @@ window.movingGuyInterval = null;
 app.stage.addChild(background);
 background.x = app.screen.width / 2;
 background.y = app.screen.height / 2;
+background.anchor.set(0.5);
 app.stage.addChild(movingGuy);
 
 
@@ -61,6 +62,8 @@ function gameLoop(delta) {
   // background.rotation += 0.01;
   // if the position value of the array is true the guy needs to the right on the x axis or down on the y axis
   if (waypoints[count][2] && count != 0 && count != (waypoints.length - 1)) {
+    movingGuy.anchor.x = 0;     /* 0 = top, 0.5 = center, 1 = bottom */
+    movingGuy.scale.x = 1;    /* flip horizontaly */
     movingGuy[pos] = movingGuy[pos] + 5; // moving the guy to the right or down by 5 pixels
     if (window.moveingBackwards) {
       if (
@@ -96,6 +99,8 @@ function gameLoop(delta) {
   }
   // if the position value of the array is false the guy needs to left on the x axis or up on the y axis
   else if (!waypoints[count][2] && count != 0 && count != (waypoints.length - 1)) {
+    movingGuy.anchor.x = 1;     /* 0 = top, 0.5 = center, 1 = bottom */
+    movingGuy.scale.x = -1;    /* flip horizontaly */
     movingGuy[pos] = movingGuy[pos] - 5;
     if (window.moveingBackwards) {
       if (
