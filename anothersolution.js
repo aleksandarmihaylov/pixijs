@@ -3,9 +3,9 @@ document.getElementById("display").appendChild(app.view);
 const background = PIXI.Sprite.fromImage("images/background.png");
 const movingGuy = PIXI.Sprite.fromImage("images/guy.png");
 
-window.reverse = false;
-window.moveingBackwards = false;
-window.movingGuyInterval = null;
+let reverseDirection = false;
+let moveingBackwards = false;
+let movingGuyInterval = null;
 app.stage.addChild(background);
 background.x = app.screen.width / 2;
 background.y = app.screen.height / 2;
@@ -13,9 +13,9 @@ background.anchor.set(0.5);
 app.stage.addChild(movingGuy);
 
 
-var count = 1; // points of the maze
-pos = "x"; // this is the position that the guy is moving x / y
-state = true; // this boolian changes position from x / y when the guy moves through one point
+let count = 1; // points of the maze
+let pos = "x"; // this is the position that the guy is moving x / y
+let state = true; // this boolian changes position from x / y when the guy moves through one point
 let waypoints = [
   [80, 100, true], // start
   [680, 100, true], // first point
@@ -42,54 +42,56 @@ let waypoints = [
 // guy starting positions
 movingGuy.x = waypoints[count - 1][0];
 movingGuy.y = waypoints[count - 1][1];
+
 function setup() {
   app.ticker.add(delta => gameLoop(delta));
 }
+
 // reversing the moving position of the guy
 function reverseArray() {
-  window.reverse = !window.reverse;
+  reverseDirection = !reverseDirection;
   waypoints.map(waypoint => {
     waypoint[2] = !waypoint[2];
   });
-  if (window.reverse) {
-    window.moveingBackwards = true;
+  if (reverseDirection) {
+    moveingBackwards = true;
   }
-  else if (!window.reverse) {
-    window.moveingBackwards = false;
+  else {
+    moveingBackwards = false;
   }
 }
 function gameLoop(delta) {
   // background.rotation += 0.01;
-  // if the position value of the array is true the guy needs to the right on the x axis or down on the y axis
+  // if the direction value of the array is true the guy needs to the right on the x axis or down on the y axis
   if (waypoints[count][2] && count != 0 && count != (waypoints.length - 1)) {
     movingGuy.anchor.x = 0;     /* 0 = top, 0.5 = center, 1 = bottom */
     movingGuy.scale.x = 1;    /* flip horizontaly */
     movingGuy[pos] = movingGuy[pos] + 5; // moving the guy to the right or down by 5 pixels
-    if (window.moveingBackwards) {
+    if (moveingBackwards) {
       if (
         movingGuy.x == waypoints[count - 1][0] &&
         movingGuy.y == waypoints[count - 1][1]
       ) {
         // if the guy is moving towards the start
-        if (window.reverse) {
+        if (reverseDirection) {
           count = count - 1;
         }
         // if the guy is moving towards the goal
-        else if (!window.reverse) {
+        else if (!reverseDirection) {
           count = count + 1;
         }
         state = !state;
       }
     }
-    else if (!window.moveingBackwards) {
+    else if (!moveingBackwards) {
       if (
         movingGuy.x == waypoints[count][0] &&
         movingGuy.y == waypoints[count][1]
       ) {
-        if (window.reverse) {
+        if (reverseDirection) {
           count = count - 1;
         }
-        else if (!window.reverse) {
+        else if (!reverseDirection) {
           count = count + 1;
         }
         state = !state;
@@ -102,29 +104,29 @@ function gameLoop(delta) {
     movingGuy.anchor.x = 1;     /* 0 = top, 0.5 = center, 1 = bottom */
     movingGuy.scale.x = -1;    /* flip horizontaly */
     movingGuy[pos] = movingGuy[pos] - 5;
-    if (window.moveingBackwards) {
+    if (moveingBackwards) {
       if (
         movingGuy.x == waypoints[count - 1][0] &&
         movingGuy.y == waypoints[count - 1][1]
       ) {
-        if (window.reverse) {
+        if (reverseDirection) {
           count = count - 1;
         }
-        else if (!window.reverse) {
+        else if (!reverseDirection) {
           count = count + 1;
         }
         state = !state;
       }
     }
-    else if (!window.moveingBackwards) {
+    else if (!moveingBackwards) {
       if (
         movingGuy.x == waypoints[count][0] &&
         movingGuy.y == waypoints[count][1]
       ) {
-        if (window.reverse) {
+        if (reverseDirection) {
           count = count - 1;
         }
-        else if (!window.reverse) {
+        else if (!reverseDirection) {
           count = count + 1;
         }
         state = !state;
