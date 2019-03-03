@@ -1,143 +1,149 @@
-const app = new PIXI.Application(800, 550, { transparent: true });
-document.getElementById('display').appendChild(app.view);
-
-// c = new Charm(PIXI);
-
-const background = PIXI.Sprite.fromImage('images/background.png');
-const movingGuy = PIXI.Sprite.fromImage('images/guy.png');
-var collision = undefined;
-var startX = 735;
-var moveY = 500;
-// let waypoints = [
-//   [80, 70],
-//   [680, 70],           //First x/y point
-//   [680, 440],         //Next x/y point
-//   [125, 440],        //Next x/y point
-//   [125, 110],         //Next x/y point
-//   [640, 110],
-//   [640, 400],
-//   [165, 400],
-//   [165, 150],
-//   [600, 150],
-//   [600, 360],
-//   [205, 360],
-//   [205, 190],
-//   [560, 320],
-//   [245, 320],
-//   [245, 230],
-//   [520, 230],
-//   [520, 280],
-//   [520, 280],            //Last x/y point
-// ];
-
-// background.anchor.set(1);
-
-// background.x = app.screen.width;
-// background.y = app.screen.height;
-// start x = 85 y =70 end of first line x 680 y 70 end is 680 440 125 440
-movingGuy.x = 80;
-movingGuy.y = 70;
-
-
+const app = new PIXI.Application(800, 600, { transparent: true });
+document.getElementById("display").appendChild(app.view);
+const background = PIXI.Sprite.fromImage("images/background.png");
+const movingGuy = PIXI.Sprite.fromImage("images/guy.png");
 app.stage.addChild(background);
+background.anchor.set(0.5);
+background.x = app.screen.width / 2;
+background.y = app.screen.height / 2;
 app.stage.addChild(movingGuy);
 
-// c.walkPath(
-//   movingGuy,       //The sprite
-//   waypoints,       //The array of waypoints
-//   300,             //Total duration, in frames
-//   "smoothstep",    //Easing type
-//   true,            //Should the path loop?
-//   true,            //Should the path reverse?
-//   1000             //Delay in milliseconds between segments
-// );
+let reverseDirection = false; // If direction is towards the start
+let moveingBackwards = false; // If the guy is moiving backwards
+let count = 1; // points of the maze
+let pos = "x"; // this is the position that the guy is moving x / y
+let state = true; // this boolian changes position from x / y when the guy moves through one point
+let waypoints = [
+  [80, 100, true], // start
+  [680, 100, true], // first point
+  [680, 470, true],
+  [125, 470, false],
+  [125, 140, false],
+  [640, 140, true],
+  [640, 430, true],
+  [165, 430, false],
+  [165, 180, false],
+  [600, 180, true],
+  [600, 390, true],
+  [200, 390, false],
+  [200, 210, false],
+  [565, 210, true],
+  [565, 360, true],
+  [240, 360, false],
+  [240, 250, false],
+  [530, 250, true],
+  [530, 320, true],
+  [295, 320, false], // last point
+  [295, 320, false] // finish
+];
 
+// guy starting positions
+movingGuy.x = waypoints[count - 1][0];
+movingGuy.y = waypoints[count - 1][1];
 
+function setup() {
+  app.ticker.add(delta => gameLoop(delta));
+}
 
-
-// in order to rotate GROUP the sprites
-// app.ticker.add(function () {
-//   // rotating the image
-//   background.rotation += 0.01;
-// });
-
-
-function contain(sprite, container) {
-  console.log('yes');
-  //Left
-  if (sprite.x < container.x) {
-    sprite.x = container.x;
-    collision = "left";
+// reversing the moving position of the guy
+function reverseArray() {
+  reverseDirection = !reverseDirection;
+  // changing the third element of the array which is responsible for the movement direction
+  waypoints.map(waypoint => {
+    waypoint[2] = !waypoint[2];
+  });
+  if (reverseDirection) {
+    moveingBackwards = true;
   }
-
-  //Top
-  if (sprite.y < container.y) {
-    sprite.y = container.y;
-    collision = "top";
+  else {
+    moveingBackwards = false;
   }
+}
+function gameLoop(delta) {
+  // background.rotation += 0.01;
+  // if the direction value [third argument] of the array is true the guy needs to go to the right on the x axis or down on the y axis
+  if (waypoints[count][2] && count != 0 && count != (waypoints.length - 1)) {
+    movingGuy.anchor.x = 0;
+    movingGuy.scale.x = 1;    /* flip guy horizontaly */
+    movingGuy[pos] = movingGuy[pos] + 5; // moving the guy to the right or down by 5 pixels
+    if (moveingBackwards) {
+      if (
+        movingGuy.x == waypoints[count - 1][0] &&
+        movingGuy.y == waypoints[count - 1][1]
+      ) {
+        // if the guy is moving towards the start
+        if (reverseDirection) {
+          count = count - 1;
+        }
+        // if the guy is moving towards the goal
+        else if (!reverseDirection) {
+          count = count + 1;
+        }
+        //change the state which determines if the guy is moving on the x or y axis
+        state = !state;
+      }
+    }
+    else if (!moveingBackwards) {
+      if (
+        movingGuy.x == waypoints[count][0] &&
+        movingGuy.y == waypoints[count][1]
+      ) {
+        if (reverseDirection) {
+          count = count - 1;
+        }
+        else if (!reverseDirection) {
+          count = count + 1;
+        }
+        state = !state;
+      }
+    }
 
-  //Right
-  if (sprite.x + sprite.width > container.width) {
-    sprite.x = container.width - sprite.width;
-    collision = "right";
   }
-
-  //Bottom
-  if (sprite.y + sprite.height > container.height) {
-    sprite.y = container.height - sprite.height;
-    collision = "bottom";
-    console.log(startX);
-    // startX -= 40;
-    console.log(startX);
+  // if the direction value [third argument] of the array is false the guy needs to go to the left on the x axis or up on the y axis
+  else if (!waypoints[count][2] && count != 0 && count != (waypoints.length - 1)) {
+    movingGuy.anchor.x = 1;
+    movingGuy.scale.x = -1;
+    movingGuy[pos] = movingGuy[pos] - 5;
+    if (moveingBackwards) {
+      if (
+        movingGuy.x == waypoints[count - 1][0] &&
+        movingGuy.y == waypoints[count - 1][1]
+      ) {
+        if (reverseDirection) {
+          count = count - 1;
+        }
+        else if (!reverseDirection) {
+          count = count + 1;
+        }
+        state = !state;
+      }
+    }
+    else if (!moveingBackwards) {
+      if (
+        movingGuy.x == waypoints[count][0] &&
+        movingGuy.y == waypoints[count][1]
+      ) {
+        if (reverseDirection) {
+          count = count - 1;
+        }
+        else if (!reverseDirection) {
+          count = count + 1;
+        }
+        state = !state;
+      }
+    }
   }
-  //Return the `collision` value
-  return collision;
-
+  //change axis on which the guy is moving
+  if (state) {
+    pos = "x";
+  } else if (!state) {
+    pos = "y";
+  }
+  // stoping animation when guy hits start or goal
+  if (count == 0 || count == (waypoints.length - 1)) {
+    app.ticker.stop();
+  }
 }
 
 
-function moveGuy() {
-  requestAnimationFrame(moveGuy);
-  if (collision === undefined) {
-    movingGuy.x += 5;
-  }
-  if (collision === 'right') {
-    movingGuy.y += 5;
-  }
-  if (collision === 'bottom') {
-    movingGuy.x -= 5;
-  }
-  if (collision === 'left') {
-    movingGuy.y -= 5;
-  }
-  if (collision === "top") {
-    movingGuy.x += 5;
-  }
 
-  // if (movingGuy.y === 70 && movingGuy.x < 685) {
-  //   movingGuy.x += 5;
-  //   // console.log(movingGuy.x);
-  //   // console.log(movingGuy.y);
-  // }
-  // if (movingGuy.x === 685 && movingGuy.y < 444) {
-  //   movingGuy.y += 5;
-  // }
-  // if (movingGuy.y === 445 && movingGuy.x > 130) {
-  //   movingGuy.anchor.x = 1;
-  //   movingGuy.scale.x = -1;
-  //   movingGuy.x -= 2;
-
-  // }
-  // if (movingGuy.x === 130 && movingGuy.y < 110) {
-  //   movingGuy.scale.x = 0;
-  //   movingGuy.y += 2;
-  // }
-  console.log(movingGuy.x);
-  if (movingGuy.x === startX) {
-    startX -= 40;
-  }
-
-  contain(movingGuy, { x: 80, y: 70, width: startX, height: moveY });
-}
-
-moveGuy();
