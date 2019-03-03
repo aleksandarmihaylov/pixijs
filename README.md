@@ -11,6 +11,7 @@ On the index.html you can find the visual solution. When it is opened you can se
 It was made to be as generic as posible, so if you have another maze to be able to use the same code.
 
 **Quick note**, the guy is moving with 5 pixels in order for the user to see faster the animation, this was possible because all the waypoints on the given maze are devidable by 5.
+
 **Quick note 2** You need to open the html file in Firefox because in order to use chrome you need to start a server to host your files, because there is no local file hosting in chrome
 
 ## Conclusion
