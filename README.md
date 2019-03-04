@@ -2,12 +2,12 @@
 I have created an animation on a person who follows a line towards a goal in a given maze. There is also a button which toggles his movement towards the start or the goal.
 
 ## Process
-The assigment was to create the animation using PixiJS. Since I am not very familiar with PixiJS, I decided to spend the first day to focus on reading upon documentation and go through some online courses. At the end of the day, I was able to create some moving and scaling rotating animations.
+The assigment was to create the animation using PixiJS. Since I am not very familiar with PixiJS, I decided to spend the first day to focus on reading upon documentation and go through some online courses. At the end of the day, I was able to create some moving, scaling and rotating animations.
 
-During the first day and on the next day I used some of my time to research if I could find any plugins or libraries which will be helpfull for my taks. Unfortunately after trying them out I understood that they won't be helpful for my case or are just outdated. After that I just continued on creating the situation on paper and figuring out the logic behinding and then writing the code.
+During the first day and on the next day I used some of my time to research if I could find any plugins or libraries which will be helpfull for my task. Unfortunately after trying them out I understood that they won't be helpful for my case or are just outdated. After that I just continued on creating the situation on paper and figuring out the logic behind and then writing the code.
 
 ## Solution
-On the index.html you can find the visual solution. When it is opened you can see two images overlaping eachother one is the background maze with a start and a goal points, the other is the guy who needs to follow the black line in order to reach the Goal. The animation starts automatically and clicking on the button you will be toggling the direction of the guy (towards the start or goal).
+On the index.html you can find the visual solution. When it is opened you can see two images overlaping each other one is the background maze with a start and a goal points, the other is the guy who needs to follow the black line in order to reach the Goal. The animation starts automatically and clicking on the button you will be toggling the direction of the guy (towards the start or goal).
 It was made to be as generic as posible, so if you have another maze to be able to use the same code.
 
 **Quick note**, the guy is moving with 5 pixels in order for the user to see faster the animation, this was possible because all the waypoints on the given maze are devidable by 5.
