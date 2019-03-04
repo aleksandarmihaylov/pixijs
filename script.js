@@ -8,9 +8,8 @@ background.x = app.screen.width / 2;
 background.y = app.screen.height / 2;
 app.stage.addChild(movingGuy);
 
-let reverseDirection = false; // If direction is towards the start
 let moveingBackwards = false; // If the guy is moiving backwards
-let count = 1; // points of the maze
+let count = 1; // points of the maze or index of the waypoints array
 let pos = "x"; // this is the position that the guy is moving x / y
 let state = true; // this boolian changes position from x / y when the guy moves through one point
 let waypoints = [
@@ -47,17 +46,11 @@ function setup() {
 
 // reversing the moving position of the guy
 function reverseArray() {
-  reverseDirection = !reverseDirection;
+  moveingBackwards = !moveingBackwards;
   // changing the third element of the array which is responsible for the movement direction
   waypoints.map(waypoint => {
     waypoint[2] = !waypoint[2];
   });
-  if (reverseDirection) {
-    moveingBackwards = true;
-  }
-  else {
-    moveingBackwards = false;
-  }
 }
 function gameLoop(delta) {
   // background.rotation += 0.01;
@@ -71,14 +64,8 @@ function gameLoop(delta) {
         movingGuy.x == waypoints[count - 1][0] &&
         movingGuy.y == waypoints[count - 1][1]
       ) {
-        // if the guy is moving towards the start
-        if (reverseDirection) {
-          count = count - 1;
-        }
-        // if the guy is moving towards the goal
-        else if (!reverseDirection) {
-          count = count + 1;
-        }
+        //substracting from the waypoint index
+        count = count - 1;
         //change the state which determines if the guy is moving on the x or y axis
         state = !state;
       }
@@ -88,12 +75,8 @@ function gameLoop(delta) {
         movingGuy.x == waypoints[count][0] &&
         movingGuy.y == waypoints[count][1]
       ) {
-        if (reverseDirection) {
-          count = count - 1;
-        }
-        else if (!reverseDirection) {
-          count = count + 1;
-        }
+        //adding to the waypoint index
+        count = count + 1;
         state = !state;
       }
     }
@@ -109,12 +92,7 @@ function gameLoop(delta) {
         movingGuy.x == waypoints[count - 1][0] &&
         movingGuy.y == waypoints[count - 1][1]
       ) {
-        if (reverseDirection) {
-          count = count - 1;
-        }
-        else if (!reverseDirection) {
-          count = count + 1;
-        }
+        count = count - 1;
         state = !state;
       }
     }
@@ -123,12 +101,7 @@ function gameLoop(delta) {
         movingGuy.x == waypoints[count][0] &&
         movingGuy.y == waypoints[count][1]
       ) {
-        if (reverseDirection) {
-          count = count - 1;
-        }
-        else if (!reverseDirection) {
-          count = count + 1;
-        }
+        count = count + 1;
         state = !state;
       }
     }
@@ -144,6 +117,3 @@ function gameLoop(delta) {
     app.ticker.stop();
   }
 }
-
-
-
