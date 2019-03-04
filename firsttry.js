@@ -1,8 +1,8 @@
 const app = new PIXI.Application(800, 600, { transparent: true });
 document.getElementById('display').appendChild(app.view);
 
-const background = PIXI.Sprite.fromImage('images/background.png');
-const movingGuy = PIXI.Sprite.fromImage('images/guy.png');
+const background = PIXI.Sprite.fromImage('pictures/background.png');
+const movingGuy = PIXI.Sprite.fromImage('pictures/guy.png');
 movingGuy.x = 80;
 movingGuy.y = 70;
 
